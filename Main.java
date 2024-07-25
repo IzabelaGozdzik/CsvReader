@@ -1,10 +1,9 @@
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 public class Main {
 
@@ -13,18 +12,34 @@ public class Main {
 
         String line = "";
         String splitBy = ",";
-        List<String[]> student = new ArrayList<>();
+        List<Uczen> student = new ArrayList<>();
 
         try {
             BufferedReader br = new BufferedReader(new FileReader("uczniowie.csv"));
             while ((line = br.readLine()) != null)   //returns a Boolean value
             {
-                student.add(line.split(splitBy));    // use comma as separator
+                String imieNazwosko = line.split(splitBy)[0];
+                String przedmiot = line.split(splitBy)[1];
+                int ocena = Integer.valueOf(line.split(splitBy)[2]);
+                student.add(new Uczen(imieNazwosko, przedmiot, ocena));
             }
-        } catch (Exception e) {
+        } catch (FileNotFoundException e) {
             System.out.println("Daj pan plik poprawny");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }catch (NumberFormatException bladLiczb){
+            System.out.println("liczby sa nie poprawne");
         } finally {
             System.out.println("wykona sie zawsze");
         }
+
+
+        student.forEach(x -> x.wypisz());
+
+
+
+
+
+
     }
 }
